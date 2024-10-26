@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import user from "../assets/man.png";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   console.log("Navbar rendered"); // Log statement for debugging
 
+  const navigate = useNavigate();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -16,6 +17,12 @@ const Navbar = () => {
 
   const toggleDropdownMenu = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("emailId");
+    navigate("/sign-in")
+    window.location.reload();
   };
 
   return (
@@ -64,11 +71,11 @@ const Navbar = () => {
             </button>
           </div>
           <div className="flex-1 flex items-center justify-center sm:justify-start">
-            <Link to="/">
+            <Link to="/candidate/form">
               <img className="h-20 w-auto" src={logo} alt="Logo" />
             </Link>
           </div>
-          <div className="hidden sm:flex sm:flex-1 sm:justify-center space-x-8">
+          <div className="hidden sm:flex sm:flex-1 sm:justify-around space-x-8">
             {/* <NavLink
               exact
               to="/candidate/form"
@@ -120,7 +127,13 @@ const Navbar = () => {
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   role="menuitem"
                 >
-                  {localStorage.getItem('authToken') ? <Link onClick={() => localStorage.removeItem('authToken')} to='/sign-in'>Sign Out</Link> : <Link to='/sign-in'>Sign In</Link>}
+                  {localStorage.getItem("emailId") ? (
+                    <Link onClick={handleLogout}>
+                      Sign Out
+                    </Link>
+                  ) : (
+                    <Link to="/sign-in">Sign In</Link>
+                  )}
                 </Link>
               </div>
             </div>
@@ -133,17 +146,17 @@ const Navbar = () => {
       >
         <div className="px-2 pt-2 pb-3 space-y-1">
           <NavLink
-            to="/candidate-form"
+            to="/candidate/form"
             className="text-gray-900 hover:bg-[#FFE4CC] hover:text-gray-900 hover:outline px-3 py-2 rounded-md text-normal font-medium active:bg-[#FFE4CC] active:text-[#FF7C00]"
           >
             Fill Form
           </NavLink>
-          <NavLink
-            to="/candidate-profile"
+          {/* <NavLink
+            to="/candidate/profile"
             className="text-gray-900 hover:bg-[#FFE4CC] hover:text-gray-900 hover:outline px-3 py-2 rounded-md text-normal font-medium active:bg-[#FFE4CC] active:text-[#FF7C00]"
           >
             View Profile
-          </NavLink>
+          </NavLink> */}
         </div>
       </div>
     </nav>

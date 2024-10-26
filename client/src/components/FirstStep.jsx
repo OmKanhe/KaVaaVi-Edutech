@@ -318,7 +318,7 @@ const FirstStep = ({ formData, handleChange }) => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#FFFAF5]">
       <div className="w-full max-w-7xl bg-white p-8 px-14 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold tracking-wide mb-4 text-center text-[#FF7C00]">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-wide mb-4 text-center text-[#FF7C00]">
           Personal Details
         </h2>
         <div className="text-center pb-10">
@@ -414,9 +414,9 @@ const FirstStep = ({ formData, handleChange }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <TextField
               label="Email ID"
-              name="emailId"
+              name="email"
               type="email"
-              value={formData.emailId}
+              value={formData.email}
               onChange={handleChange}
               variant="outlined"
               required

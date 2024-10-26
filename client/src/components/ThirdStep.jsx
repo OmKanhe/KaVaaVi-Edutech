@@ -1,72 +1,92 @@
-import React from 'react';
-import { TextField, Typography, Button, Grid } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React from "react";
+import { TextField, Typography, Button, Grid } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function ThirdStep({ formData, handleChange, handleChangeProfessionalDetails, handleAddEntry, handleRemoveEntry }) {
-
+function ThirdStep({
+  formData,
+  handleChange,
+  handleChangeProfessionalDetails,
+  handleAddEntry,
+  handleRemoveEntry,
+}) {
   const handleRemove = (section) => {
     handleRemoveEntry(section);
   };
 
-  
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#FFFAF5]">
       <div className="w-full max-w-7xl bg-white p-8 px-14 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold tracking-wide mb-10 text-center text-[#FF7C00]">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-wide mb-10 text-center text-[#FF7C00]">
           Professional Details
         </h2>
         <form className="space-y-14">
           {/* Activities Section */}
           <div className="space-y-8">
-            <Typography  variant="h6"
-                      className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8">
+            <Typography
+              variant="h6"
+              className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8"
+            >
               Curricular Details
             </Typography>
-            <Typography className='text-gray-600'>
-            To help us better understand your background, please provide the following information:
+            <Typography className="text-gray-600">
+              To help us better understand your background, please provide the
+              following information:
             </Typography>
-            {formData.activities && formData?.activities?.map((activity, index) => (
-              <Grid container spacing={2} key={index}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Course Name"
-                    name='activityName'
-                    value={activity.activityName}
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'activities')}
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
+            {formData.activities &&
+              formData?.activities?.map((activity, index) => (
+                <Grid container spacing={2} key={index}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Course Name"
+                      name="activityName"
+                      value={activity.activityName}
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(
+                          event,
+                          index,
+                          "activities"
+                        )
+                      }
+                      variant="outlined"
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Rank/Position"
+                      name="activityRank"
+                      value={activity.activityRank}
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(
+                          event,
+                          index,
+                          "activities"
+                        )
+                      }
+                      variant="outlined"
+                      required
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Rank/Position"
-                    name='activityRank'
-                    value={activity.activityRank}
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'activities')}
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            ))}
+              ))}
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => handleAddEntry('activities')}
+                  onClick={() => handleAddEntry("activities")}
                 >
                   Add Activity
                 </Button>
               </Grid>
-              {formData.activities.length > 0 && (
+              {formData?.activities?.length > 0 && (
                 <Grid item>
                   <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => handleRemove('activities')}
+                    onClick={() => handleRemove("activities")}
                     startIcon={<DeleteIcon />}
                   >
                     Remove
@@ -79,69 +99,99 @@ function ThirdStep({ formData, handleChange, handleChangeProfessionalDetails, ha
           {/* Internships Section */}
           <hr />
           <div className="space-y-8">
-            <Typography  variant="h6"
-                      className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8 font-semibold">
+            <Typography
+              variant="h6"
+              className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8 font-semibold"
+            >
               Internships Details
             </Typography>
-            <Typography className='text-gray-600'>We want to know about your hands-on experience in the industry. Please provide the following details. Leave empty if not done any.</Typography>
-            {formData.internships && formData?.internships?.map((internship, index) => (
-              <Grid container spacing={2} key={index}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Company Name"
-                    name='companyName'
-                    value={internship.companyName}
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'internships')}
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
+            <Typography className="text-gray-600">
+              We want to know about your hands-on experience in the industry.
+              Please provide the following details. Leave empty if not done any.
+            </Typography>
+            {formData.internships &&
+              formData?.internships?.map((internship, index) => (
+                <Grid container spacing={2} key={index}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Company Name"
+                      name="companyName"
+                      value={internship.companyName}
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(
+                          event,
+                          index,
+                          "internships"
+                        )
+                      }
+                      variant="outlined"
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Position"
+                      name="position"
+                      value={internship.position}
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(
+                          event,
+                          index,
+                          "internships"
+                        )
+                      }
+                      variant="outlined"
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Starting Date"
+                      name="startDate" // Use "startDate" consistently
+                      type="date"
+                      value={internship.startDate || ""} // Ensure value is bound correctly
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(
+                          event,
+                          index,
+                          "internships"
+                        )
+                      }
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Ending Date"
+                      name="endDate" // Use "endDate" consistently
+                      type="date"
+                      value={internship.endDate || ""} // Ensure value is bound correctly
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(
+                          event,
+                          index,
+                          "internships"
+                        )
+                      }
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Position"
-                    name='position'
-                    value={internship.position}
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'internships')}
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Starting Date"
-                    name={`internships[${index}].startingDate`}
-                    type="date"
-                    value={internship.startingDate}
-                    onChange={(e) => handleChange(e, index, 'internships')}
-                    variant="outlined"
-                    InputLabelProps={{ shrink: true }}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Ending Date"
-                    name={internship.endingDate || ''}
-                    type="date"
-                    value={internship.endingDate}
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'internships')}
-                    variant="outlined"
-                    InputLabelProps={{ shrink: true }}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            ))}
+              ))}
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => handleAddEntry('internships')}
+                  onClick={() => handleAddEntry("internships")}
                 >
                   Add Internship
                 </Button>
@@ -151,10 +201,10 @@ function ThirdStep({ formData, handleChange, handleChangeProfessionalDetails, ha
                   <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => handleRemove('internships')}
+                    onClick={() => handleRemove("internships")}
                     startIcon={<DeleteIcon />}
                   >
-                    Remove 
+                    Remove
                   </Button>
                 </Grid>
               )}
@@ -164,72 +214,84 @@ function ThirdStep({ formData, handleChange, handleChangeProfessionalDetails, ha
           {/* Jobs Section */}
           <hr />
           <div className="space-y-8">
-            <Typography  variant="h6"
-                      className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8">
+            <Typography
+              variant="h6"
+              className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8"
+            >
               Job Details
             </Typography>
-            <Typography className='text-gray-600'>Enter your job details you have done, if not leave it empty.</Typography>
+            <Typography className="text-gray-600">
+              Enter your job details you have done, if not leave it empty.
+            </Typography>
 
-            {formData.jobs && formData?.jobs?.map((job, index) => (
-              <Grid container spacing={2} key={index}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Company Name"
-                    name="companyName"
-                    value={job.companyName || ''}
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'jobs')}
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
+            {formData.jobs &&
+              formData?.jobs?.map((job, index) => (
+                <Grid container spacing={2} key={index}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Company Name"
+                      name="companyName"
+                      value={job.companyName || ""}
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(event, index, "jobs")
+                      }
+                      variant="outlined"
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Position"
+                      name="position"
+                      value={job.position || ""} // Ensure value is properly bound
+                      onChange={(event) =>
+                        handleChangeProfessionalDetails(event, index, "jobs")
+                      }
+                      placeholder="Company Name"
+                      variant="outlined"
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Starting Date"
+                      name="startDate" // Use direct property names
+                      type="date"
+                      value={job.startingDate}
+                      onChange={(e) =>
+                        handleChangeProfessionalDetails(e, index, "jobs")
+                      } // Ensure the onChange uses the correct handler
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Ending Date"
+                      name="endDate" // Use direct property names
+                      type="date"
+                      value={job.endingDate}
+                      onChange={(e) =>
+                        handleChangeProfessionalDetails(e, index, "jobs")
+                      } // Ensure the onChange uses the correct handler
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Position"
-                    name="position"
-                    value={job.position || ''}  // Ensure value is properly bound
-                    onChange={(event) => handleChangeProfessionalDetails(event, index, 'jobs')}
-                    placeholder="Company Name"
-                    variant="outlined"
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Starting Date"
-                    name={`jobs[${index}][startingDate]`}
-                    type="date"
-                    value={job.startingDate}
-                    onChange={(e) => handleChange(e, index, 'jobs')}
-                    variant="outlined"
-                    InputLabelProps={{ shrink: true }}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Ending Date"
-                    name={`jobs[${index}].endingDate`}
-                    type="date"
-                    value={job.endingDate}
-                    onChange={(e) => handleChange(e, index, 'jobs')}
-                    variant="outlined"
-                    InputLabelProps={{ shrink: true }}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            ))}
+              ))}
             <Grid container spacing={2} justifyContent="flex-end">
               <Grid item>
                 <Button
                   variant="contained"
-                  color= 'primary'
-                  onClick={() => handleAddEntry('jobs')}
-                  
+                  color="primary"
+                  onClick={() => handleAddEntry("jobs")}
                 >
                   Add Job
                 </Button>
@@ -239,10 +301,10 @@ function ThirdStep({ formData, handleChange, handleChangeProfessionalDetails, ha
                   <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => handleRemove('jobs')}
+                    onClick={() => handleRemove("jobs")}
                     startIcon={<DeleteIcon />}
                   >
-                    Remove 
+                    Remove
                   </Button>
                 </Grid>
               )}
@@ -255,10 +317,6 @@ function ThirdStep({ formData, handleChange, handleChangeProfessionalDetails, ha
 }
 
 export default ThirdStep;
-
-
-
-
 
 // import React from 'react';
 // import { TextField, Typography, Button, Grid } from '@mui/material';
@@ -449,6 +507,3 @@ export default ThirdStep;
 // }
 
 // export default ThirdStep;
-
-
-

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import image from "../../assets/Nerd-bro.svg";
+import image from "../../assets/Nerd-bro.svg"
 import { Link, useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 import toast from "react-hot-toast";
@@ -8,8 +8,13 @@ import toast from "react-hot-toast";
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('emailId')) {
+      navigate("/candidate/form");
+    }
+  }, [navigate]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -21,25 +26,25 @@ function SignIn() {
       const response = await axios.post(
         "http://localhost/kavaavi/api/login.php",
         loginCredentials,
-        { withCredentials: true }
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
       );
       const data = response.data;
-      console.log(data);
-      
-      if (data.status === "error")
+
+      if (data.status === "error") {
         toast(data.message, {
           style: { backgroundColor: "red", color: "white" },
         });
-      else {
-        toast(data.message,{style:{backgroundColor:'green', color:'white'}});
+      } else {
+        toast(data.message, { style: { backgroundColor: 'green', color: 'white' } });
+        localStorage.setItem("emailId", email);
+        console.log("Navigating to /candidate/form");
         navigate("/candidate/form");
       }
-
-      // if (token) {
-      //   localStorage.setItem("authToken", token);
-      //   toast("Login successful",{style:{backgroundColor:'green', color:'white'}})
-      //   navigate("/candidate/form");
-      // }
     } catch (error) {
       console.error("Error details:", error.response || error.message || error);
     }

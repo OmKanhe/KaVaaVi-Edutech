@@ -10,7 +10,7 @@ export const StepProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    console.log("hiiiwewi");
+    // console.log("Form being in local storage.");
     localStorage.setItem('formData', JSON.stringify(formData));
   }, [formData]);
 

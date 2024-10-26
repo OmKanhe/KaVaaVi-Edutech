@@ -352,7 +352,7 @@ function SecondStep({ formData, handleChange }) {
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#FFFAF5]">
       <div className="w-full max-w-7xl bg-white p-8 px-14 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold tracking-wide mb-10 text-center text-[#FF7C00]">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-wide mb-10 text-center text-[#FF7C00]">
           Educational Details
         </h2>
         <div className="text-center pb-10">

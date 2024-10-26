@@ -1,18 +1,12 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-function Protectedroute() {
-  // const isLoggedIn = () =>{
-  //     let candidate = localStorage.getItem('authToken')
+function ProtectedRoute() {
+  // Check directly from local storage
+  const isLoggedIn = localStorage.getItem('emailId') !== null;
 
-  //     if(candidate!=null)
-  //         return true;
-  //     else
-  //     return false;
-  // }
-
-  //   return  isLoggedIn() ? <Outlet/> : <Navigate to={"/sign-in"}/>
-  return <Outlet />;
+  // Render the Outlet if the user is logged in, otherwise redirect to Sign In
+  return isLoggedIn ? <Outlet /> : <Navigate to="/sign-in" />;
 }
 
-export default Protectedroute;
+export default ProtectedRoute;
