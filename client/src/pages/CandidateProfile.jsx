@@ -1,405 +1,306 @@
-import React from "react";
-import assets from "../assets/man.png";
-import ReactToPrint from "react-to-print";
-import { useRef } from "react";
+import React from 'react';
+import { 
+  Box, 
+  Container,
+  Grid, 
+  Typography, 
+  Card, 
+  CardContent,
+  Chip,
+  IconButton,
+  useTheme,
+  alpha
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import {
+  Email,
+  Phone,
+  LocationOn,
+  School,
+  Work,
+  EmojiEvents,
+  BusinessCenter,
+  OpenInNew
+} from '@mui/icons-material';
 
-import { useState } from "react";
-import { AlternateEmail } from "@mui/icons-material";
+const StyledCard = styled(Card)(({ theme }) => ({
+  borderRadius: 16,
+  border: '1px solid',
+  borderColor: alpha(theme.palette.divider, 0.1),
+  background: theme.palette.background.paper,
+  backdropFilter: 'blur(20px)',
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: theme.shadows[4],
+  },
+}));
 
-function CandidateProfile() {
-  const componentRef = useRef();
-  const handlePrint = () => {
-    window.print();
-  };
-  const [profile, setProfile] = useState({
-    // Personal info
-    name: "Bhushan H Bankar",
-    dob: "1998-06-15",
-    gender: "Male",
-    fatherName: "Harishchandra Bankar",
-    motherName: "Suman Bankar",
-    imgUrl: "",
+const TimelineCard = styled(StyledCard)(({ theme }) => ({
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderRadius: '4px 0 0 4px',
+    backgroundColor: '#ff7d29',
+  },
+}));
 
-    // Contact Information
-    email: "bhushanbankar@example.com",
-    mobile: "9876543210",
-    alternateMobile: "9123456780",
+const ContactChip = styled(Chip)(({ theme }) => ({
+  borderRadius: 8,
+  height: 36,
+  padding: theme.spacing(0.5),
+  '& .MuiChip-icon': {
+    color: '#ff7d29',
+  },
+}));
 
-    // Address
-    addressLine: "123, Green Street",
-    landmark: "Near City Mall",
-    city: "Nagpur",
-    district: "Nagpur",
-    state: "Maharashtra",
-    country: "India",
-    zipCode: "440001",
+const CandidateProfile = ({ candidateData }) => {
+  const theme = useTheme();
 
-    // SSC Details
-    sscSchoolName: "Shivaji Vidyalaya",
-    sscBoardName: "Maharashtra State Board",
-    sscMarksObtained: "85.60%",
+  const renderContactInfo = () => (
+    <Box display="flex" gap={1} flexWrap="wrap">
+      <ContactChip
+        icon={<Email />}
+        label={candidateData.email}
+        onClick={() => window.location.href = `mailto:${candidateData.email}`}
+      />
+      <ContactChip
+        icon={<Phone />}
+        label={candidateData.phoneNumber}
+        onClick={() => window.location.href = `tel:${candidateData.phoneNumber}`}
+      />
+      <ContactChip
+        icon={<LocationOn />}
+        label={`${candidateData.city}, ${candidateData.country}`}
+      />
+    </Box>
+  );
 
-    // HSC Details
-    hscSchoolName: "Vivekananda Junior College",
-    hscBoardName: "Maharashtra State Board",
-    hscMarksObtained: "78.40%",
+  const renderEducationTimeline = () => (
+    <Box display="flex" flexDirection="column" gap={2}>
+      {/* Graduation */}
+      {candidateData.graduation?.[0] && (
+        <TimelineCard>
+          <CardContent>
+            <Typography variant="h6" sx={{ color: '#ff7d29' }} gutterBottom>
+              {candidateData.graduation[0].courseName}
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              {candidateData.graduation[0].universityName}
+            </Typography>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="body2" color="text.secondary">
+                {candidateData.graduation[0].startingYear} - {candidateData.graduation[0].graduationYear}
+              </Typography>
+              <Chip 
+                label={`CGPA: ${candidateData.graduation[0].cgpa}`}
+                size="small"
+                sx={{ 
+                  borderColor: '#ff7d29',
+                  color: '#ff7d29'
+                }}
+                variant="outlined"
+              />
+            </Box>
+          </CardContent>
+        </TimelineCard>
+      )}
+      {/* College */}
+      {candidateData.college?.[0] && (
+        <TimelineCard>
+          <CardContent>
+            <Typography variant="h6" sx={{ color: '#ff7d29' }} gutterBottom>
+              {candidateData.college[0].stream}
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              {candidateData.college[0].collegeName}
+            </Typography>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="body2" color="text.secondary">
+                {candidateData.college[0].startingYear} - {candidateData.college[0].graduationYear}
+              </Typography>
+              <Chip 
+                label={`Percentage: ${candidateData.college[0].percentage}%`}
+                size="small"
+                sx={{ 
+                  borderColor: '#ff7d29',
+                  color: '#ff7d29'
+                }}
+                variant="outlined"
+              />
+            </Box>
+          </CardContent>
+        </TimelineCard>
+      )}
+      {/* School */}
+      {candidateData.school?.[0] && (
+        <TimelineCard>
+          <CardContent>
+            <Typography variant="h6" sx={{ color: '#ff7d29' }} gutterBottom>
+              {candidateData.school[0].boardName}
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              {candidateData.school[0].schoolName}
+            </Typography>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="body2" color="text.secondary">
+                High School
+              </Typography>
+              <Chip 
+                label={`Marks: ${candidateData.school[0].schoolMarks}`}
+                size="small"
+                sx={{ 
+                  borderColor: '#ff7d29',
+                  color: '#ff7d29'
+                }}
+                variant="outlined"
+              />
+            </Box>
+          </CardContent>
+        </TimelineCard>
+      )}
+    </Box>
+  );
 
-    // Graduation Details
-    graduationCollegeName: "Wainganga College of Engineering and Management",
-    graduationCourseName: "B.E. in Computer Science",
-    graduationYear: "2021",
-    graduationCGPA: "8.5",
+  const renderExperienceTimeline = () => (
+    <Box display="flex" flexDirection="column" gap={2}>
+      {candidateData.jobs?.map((job, index) => (
+        <TimelineCard key={`job-${index}`}>
+          <CardContent>
+            <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+              <Box>
+                <Typography variant="h6" sx={{ color: '#ff7d29' }} gutterBottom>
+                  {job.position}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="medium">
+                  {job.companyName}
+                </Typography>
+              </Box>
+              {/* <IconButton size="small">
+                <OpenInNew fontSize="small" sx={{ color: '#ff7d29' }} />
+              </IconButton> */}
+            </Box>
+            <Typography variant="body2" color="text.secondary">
+              {job.startDate} - {job.endDate || 'Present'}
+            </Typography>
+          </CardContent>
+        </TimelineCard>
+      ))}
+    </Box>
+  );
 
-    // Post Graduation Details
-    postGraduationCollegeName: "Indian Institute of Management, Nagpur",
-    postGraduationCourseName: "MBA in Information Technology",
-    postGraduationYear: "2024",
-    postGraduationCGPA: "8.9",
+  const renderInternships = () => (
+    <Box display="flex" flexDirection="column" gap={2}>
+      {candidateData.internships?.map((internship, index) => (
+        <TimelineCard key={`internship-${index}`}>
+          <CardContent>
+            <Typography variant="h6" sx={{ color: '#ff7d29' }} gutterBottom>
+              {internship.position}
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              {internship.companyName}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {internship.startDate} - {internship.endDate}
+            </Typography>
+          </CardContent>
+        </TimelineCard>
+      ))}
+    </Box>
+  );
 
-    // PhD Details
-    phdCourseName: "PhD in Artificial Intelligence and Machine Learning",
-    phdNumber: "AI-ML-2024-001",
-
-    // Curricular Details
-    curricularCourseName: "AI and Machine Learning",
-    curricularRankOrPosition: "Top 10% in Class",
-
-    // Internship Details
-    internshipCompanyName: "CuriosityTech",
-    internshipPosition: "Full Stack Developer Intern",
-    internshipDuration: "6 months",
-    internshipStartDate: "2023-01-10",
-    internshipEndDate: "2023-07-10",
-
-    // Job Details
-    jobCompanyName: "Clustor Computing",
-    jobPosition: "Full Stack Developer",
-    jobStartDate: "2023-08-01",
-    jobEndDate: "Present",
-  });
+  const renderAchievements = () => (
+    <Grid container spacing={2}>
+      {candidateData.activities?.map((activity, index) => (
+        <Grid item xs={12} sm={6} key={`activity-${index}`}>
+          <StyledCard>
+            <CardContent>
+              <Box display="flex" alignItems="center" gap={1}>
+                <EmojiEvents sx={{ color: '#ff7d29' }} />
+                <Box>
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    {activity.activityName}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {activity.activityRank}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </StyledCard>
+        </Grid>
+      ))}
+    </Grid>
+  );
 
   return (
-    <>
-      <div ref={componentRef}>
-        <div className="w-[100%] m-auto mb-8 p-6 sm:font-light  lg:w-[80vw]">
-          {/* Candidate Profile Title */}
-          <h1 className="lg:text-4xl font-bold text-[#FF7C00] mb-6 text-center sm:text-[12px] ">
-            Candidate Profile
-          </h1>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* Header Section */}
+      <StyledCard sx={{ mb: 4 }}>
+        <CardContent>
+          <Grid container spacing={3}>
+            <Grid item xs>
+              <Typography variant="h4" gutterBottom>
+                {candidateData.firstName} {candidateData.lastName}
+              </Typography>
+              <Typography variant="h6" color="text.secondary" gutterBottom>
+                <span className='text-[#ff7d29]'>Highest Qualification</span> - {candidateData.highestQualification}
+              </Typography>
+              {renderContactInfo()}
+            </Grid>
+          </Grid>
+        </CardContent>
+      </StyledCard>
 
-          <div className="wrapper shadow-lg rounded-md bg-white p-6 ">
-            {/* Personal Information */}
-            <div>
-              <h2 className="text-[#FF7C00] font-semibold text-xl mb-2 text-center">
-                Personal Information
-              </h2>
-              <div>
-                <div className="flex justify-between mb-4 flex-col lg:flex-row ">
-                  <img
-                    src={profile.imgUrl || assets}
-                    alt="Candidate Profile Image"
-                    className="lg:w-[200px]  w-[150px] rounded-full border-2 border-gray-300 sm: "
-                  />
+      <Grid container spacing={4}>
+        {/* Left Column */}
+        <Grid item xs={12} md={7}>
+          <Box mb={4}>
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+              <School sx={{ color: '#ff7d29' }} />
+              <Typography variant="h5">Education</Typography>
+            </Box>
+            {renderEducationTimeline()}
+          </Box>
 
-                  <div>
-                    <p className="text-lg mb-2">
-                      <span className="text-gray-700 font-medium">Name:</span>{" "}
-                      {profile.name || "N/A"}
-                    </p>
-                    <p className="text-lg mb-2">
-                      <span className="text-gray-700 font-medium">DOB:</span>{" "}
-                      {profile.dob || "N/A"}
-                    </p>
-                    <p className="text-lg mb-2">
-                      <span className="text-gray-700 font-medium">Gender:</span>{" "}
-                      {profile.gender || "N/A"}
-                    </p>
-                    <p className="text-lg mb-2">
-                      <span className="text-gray-700 font-medium">
-                        Father's Name:
-                      </span>{" "}
-                      {profile.fatherName || "N/A"}
-                    </p>
-                    <p className="text-lg mb-2">
-                      <span className="text-gray-700 font-medium">
-                        Mother's Name:
-                      </span>{" "}
-                      {profile.motherName || "N/A"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <Box mb={4}>
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+              <Work sx={{ color: '#ff7d29' }} />
+              <Typography variant="h5">Experience</Typography>
+            </Box>
+            {renderExperienceTimeline()}
+          </Box>
+        </Grid>
 
-            {/* Contact & Address Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 ">
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Contact Information
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Email:</span>{" "}
-                  {profile.email || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Mobile:</span>{" "}
-                  {profile.mobile || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Alternate Mobile:
-                  </span>{" "}
-                  {profile.alternateMobile || "N/A"}
-                </p>
-              </div>
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Address Details
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Address Line:
-                  </span>{" "}
-                  {profile.addressLine || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Landmark:</span>{" "}
-                  {profile.landmark || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">City:</span>{" "}
-                  {profile.city || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">District:</span>{" "}
-                  {profile.district || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">State:</span>{" "}
-                  {profile.state || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Country:</span>{" "}
-                  {profile.country || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">ZIP Code:</span>{" "}
-                  {profile.zipCode || "N/A"}
-                </p>
-              </div>
-            </div>
+        {/* Right Column */}
+        <Grid item xs={12} md={5}>
+          <Box mb={4}>
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+              <BusinessCenter sx={{ color: '#ff7d29' }} />
+              <Typography variant="h5">Internships</Typography>
+            </Box>
+            {renderInternships()}
+          </Box>
 
-            {/* Educational Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  SSC
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    School Name:
-                  </span>{" "}
-                  {profile.sscSchoolName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Board Name:</span>{" "}
-                  {profile.sscBoardName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Marks Obtained:
-                  </span>{" "}
-                  {profile.sscMarksObtained || "N/A"}
-                </p>
-              </div>
-
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  HSC
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    School Name:
-                  </span>{" "}
-                  {profile.hscSchoolName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Board Name:</span>{" "}
-                  {profile.hscBoardName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Marks Obtained:
-                  </span>{" "}
-                  {profile.hscMarksObtained || "N/A"}
-                </p>
-              </div>
-
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Graduation
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    College Name:
-                  </span>{" "}
-                  {profile.graduationCollegeName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Course Name:
-                  </span>{" "}
-                  {profile.graduationCourseName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Graduation Year:
-                  </span>{" "}
-                  {profile.graduationYear || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">CGPA:</span>{" "}
-                  {profile.graduationCGPA || "N/A"}
-                </p>
-              </div>
-
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Post Graduation
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    College Name:
-                  </span>{" "}
-                  {profile.postGraduationCollegeName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Course Name:
-                  </span>{" "}
-                  {profile.postGraduationCourseName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Graduation Year:
-                  </span>{" "}
-                  {profile.postGraduationYear || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">CGPA:</span>{" "}
-                  {profile.postGraduationCGPA || "N/A"}
-                </p>
-              </div>
-
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  PHD
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Course Name:
-                  </span>{" "}
-                  {profile.phdCourseName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    {" "}
-                    PDH Number:
-                  </span>{" "}
-                  {profile.phdNumber || "N/A"}
-                </p>
-              </div>
-
-              {/* Add other sections similarly for post-graduation, PhD, etc. */}
-            </div>
-
-            {/* Professional Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Curricular Details
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Course Name:
-                  </span>{" "}
-                  {profile.curricularCourseName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Rank / Position:
-                  </span>{" "}
-                  {profile.curricularRankOrPosition || "N/A"}
-                </p>
-              </div>
-              {/* Internship */}
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Internship
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Company Name:
-                  </span>{" "}
-                  {profile.internshipCompanyName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Position:</span>{" "}
-                  {profile.internshipPosition || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Start Date :
-                  </span>{" "}
-                  {profile.internshipStartDate || "N/A"}
-                </p>
-
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">End Date :</span>{" "}
-                  {profile.internshipEndDate || "N/A"}
-                </p>
-              </div>
-
-              <div className="border p-4 rounded-md shadow-md">
-                <h2 className="text-[#FF7C00] font-semibold text-xl mb-2">
-                  Job
-                </h2>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Company Name:
-                  </span>{" "}
-                  {profile.jobCompanyName || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">Position:</span>{" "}
-                  {profile.jobPosition || "N/A"}
-                </p>
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">
-                    Start Date :
-                  </span>{" "}
-                  {profile.jobStartDate || "N/A"}
-                </p>
-
-                <p className="text-lg mb-2">
-                  <span className="text-gray-700 font-medium">End Date :</span>{" "}
-                  {profile.jobEndDate || "N/A"}
-                </p>
-              </div>
-            </div>
-
-            {/* Add more sections for job experience, achievements, etc. */}
-          </div>
-          <button
-            onClick={handlePrint}
-            className="mt-4 px-4 py-2 bg-[#FF7C00] text-white rounded"
-          >
-            Download Resume
-          </button>
-        </div>
-      </div>
-    </>
+          <Box>
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+              <EmojiEvents sx={{ color: '#ff7d29' }} />
+              <Typography variant="h5">Achievements</Typography>
+            </Box>
+            {renderAchievements()}
+          </Box>
+        </Grid>
+      </Grid>
+    </Container>
   );
-}
-// }
+};
+
 export default CandidateProfile;
+
+
+

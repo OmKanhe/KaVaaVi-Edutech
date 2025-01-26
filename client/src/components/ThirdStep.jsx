@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { TextField, Typography, Button, Grid } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { CloudUploadIcon } from "lucide-react";
 
 function ThirdStep({
   formData,
@@ -8,7 +9,8 @@ function ThirdStep({
   handleChangeProfessionalDetails,
   handleAddEntry,
   handleRemoveEntry,
-}) {
+}) {  
+
   const handleRemove = (section) => {
     handleRemoveEntry(section);
   };
@@ -20,13 +22,17 @@ function ThirdStep({
           Professional Details
         </h2>
         <form className="space-y-14">
-          {/* Activities Section */}
+                    {/* Activities Section */}
           <div className="space-y-8">
             <Typography
-              variant="h6"
+              variant="h5"
               className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8"
             >
               Curricular Details
+            </Typography>
+            <Typography variant="h6"               className="col-span-1 md:col-span-2 text-[#FF7C00] mt-8"
+            >
+              Add your certifications and trainings
             </Typography>
             <Typography className="text-gray-600">
               To help us better understand your background, please provide the

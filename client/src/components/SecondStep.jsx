@@ -375,7 +375,7 @@ function SecondStep({ formData, handleChange }) {
             >
               <MenuItem value="ssc">SSC</MenuItem>
               <MenuItem value="hsc">HSC</MenuItem>
-              <MenuItem value="graduation">Graduation</MenuItem>
+              <MenuItem value="graduation">Graduation - <i> even if pursuing</i></MenuItem>
               <MenuItem value="post-graduation">Post-Graduation</MenuItem>
               <MenuItem value="phd">PhD</MenuItem>
             </TextField>

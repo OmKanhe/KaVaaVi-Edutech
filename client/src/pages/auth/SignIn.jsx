@@ -96,8 +96,8 @@ function SignIn() {
             >
               LOGIN
             </Button>
-            <Link to="/sign-up" className="text-md underline">
-              Create an account
+            <Link to="/sign-up" className="text-md">
+              Create an account here
             </Link>
           </div>
         </form>

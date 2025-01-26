@@ -274,13 +274,41 @@ import {
   MenuItem,
   Select,
   InputLabel,
+  Button,
 } from "@mui/material";
 import { Country, State, City } from "country-state-city";
+import { CloudUploadIcon } from "lucide-react";
 
-const FirstStep = ({ formData, handleChange }) => {
+const FirstStep = ({ formData, handleChange, setFormData }) => {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    if (formData.profilePhoto) {
+      setImagePreview(formData.profilePhoto);
+    }
+  }, [formData.profilePhoto]);
+
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        setFormData((prev) => {
+          const updatedFormData = { ...prev, profilePhoto: base64Image };
+          localStorage.setItem('formData', JSON.stringify(updatedFormData)); // Persist the data
+          return updatedFormData;
+        });
+      };
+      reader.readAsDataURL(file);
+      setImagePreview(URL.createObjectURL(file)); // Update preview
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -529,6 +557,33 @@ const FirstStep = ({ formData, handleChange }) => {
               variant="outlined"
             />
           </div>
+          {/* <div className="sm:flex flex-wrap mt-6">
+          <input
+            accept="image/*"
+            id="upload-image"
+            type="file"
+            name="profilePhoto"
+            style={{ display: "none" }}
+            onChange={handleImageChange}
+          />
+          <label htmlFor="upload-image">
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "#FF7C00" , marginTop: "3rem", marginRight: "4rem"}}
+              startIcon={<CloudUploadIcon />}
+              component="span"
+            >
+              Upload Profile Image
+            </Button>
+          </label>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Image Preview"
+              style={{ width: "150px", height: "150px", marginTop: "10px", borderRadius: "50%", border:"1px solid black" }}
+            />
+          )}
+        </div> */}
         </form>
       </div>
     </div>

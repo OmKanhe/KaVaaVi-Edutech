@@ -15,6 +15,8 @@ const CustomStepperRoot = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  justifyItems: 'center',
+  justifyContent: 'center',
   marginTop: theme.spacing(7),
   marginBottom: theme.spacing(5),
 }));
@@ -112,8 +114,10 @@ const CandidateForm = () => {
           activities: [{ activityName: '', activityRank: '' }],
           internships: [{ companyName: '', position: '', startDate: '', endDate: '' }],
           jobs: [{ companyName: '', position: '', startDate: '', endDate: '' }],
+          profilePhoto: '', // Add this field
         };
   });
+  
 
   useEffect(() => {
     localStorage.setItem('formData', JSON.stringify(formData));
@@ -139,73 +143,117 @@ const CandidateForm = () => {
 
   const handleDialogConfirm = async () => {
     setDialogOpen(false); // Close the dialog
-
-    const response = await axios.post(
-      "http://localhost/kavaavi/api/fromData.php",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
+  
+    // Create a new FormData object
+    try {
+      // Create a FormData instance
+      const formDataWithImage = new FormData();
+      
+      // Loop through each key-value pair in the form data
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "profilePhoto" && value) {
+          // If the value is the image in base64, decode it back to a file blob
+          const byteString = atob(value.split(",")[1]); // Decode base64
+          const mimeType = value.split(",")[0].match(/:(.*?);/)[1]; // Extract MIME type from base64
+          const arrayBuffer = new Uint8Array(byteString.length);
+          
+          // Create the byte array from base64
+          for (let i = 0; i < byteString.length; i++) {
+            arrayBuffer[i] = byteString.charCodeAt(i);
+          }
+    
+          // Create the Blob from the array buffer with mime type
+          const fileBlob = new Blob([arrayBuffer], { type: mimeType });
+    
+          // Append the file to FormData
+          formDataWithImage.append(key, fileBlob, "profile-photo.png"); // Using the filename (can be dynamic)
+        } else {
+          // Append other fields (name, email, etc.)
+          formDataWithImage.append(key, value);
+        }
+      });
+    
+      // Make the POST request with the FormData object
+      console.log("photo: ", formData.profilePhoto);
+      
+      const response = await axios.post(
+        "http://localhost/kavaavi/api/fromData.php",
+        formDataWithImage, // Send the FormData object with image
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file upload
+          },
+          withCredentials: true,
+        }
+      );
+    
+      console.log(response, "Response");
+    
+      const data = response.data;
+      console.log(data);
+    
+      // Handle the response
+      if (data.status === "error") {
+        const errorMessages = data.messages?.join("\n");
+        toast(errorMessages || data.message, {
+          style: { backgroundColor: "#FF4545", color: "white" },
+          duration: 3000,
+        });
       }
-    );
-    console.log(response, "Response");
-
-    const data = response.data;
-    console.log(data);
-
-    if (data.status === "error") {
-      toast(data.message, {
-        style: { backgroundColor: "red", color: "white" },
+      if (data.status === "success") {
+        toast(data.message, {
+          style: { backgroundColor: "green", color: "white" },
+          duration: 5000,
+        });
+        setFormData({
+          fullName: '',
+          email: '',
+          dateOfBirth: '',
+          phoneNumber: '',
+          alternateNumber: '',
+          address: '',
+          landmark: '',
+          country: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          district: '',
+          highestQualification: '',
+          schoolName: '',
+          boardName: '',
+          schoolMarks: '',
+          collegeName: '',
+          stream: '',
+          collegeBoardName: '',
+          collegeMarks: '',
+          universityCollegeName: '',
+          universityName: '',
+          courseName: '',
+          branchName: '',
+          startingYear: '',
+          graduationYear: '',
+          cgpa: '',
+          postGradCollegeName: '',
+          postGradCourseName: '',
+          postGradUniversityName: '',
+          postGradStartDate: '',
+          postGradEndDate: '',
+          activities: [{ activityName: '', activityRank: '' }],
+          internships: [{ companyName: '', position: '', startDate: '', endDate: '' }],
+          jobs: [{ companyName: '', position: '', startDate: '', endDate: '' }],
+          profilePhoto: "", // Clear the image field
+        });
+      }
+  
+        // Optionally, remove form data from local storage
+        localStorage.removeItem('formData');
+      }
+    catch (error) {
+      console.error("Error submitting the form:", error);
+      toast("An error occurred while submitting the form.", {
+        style: { backgroundColor: "#FF4545", color: "white" },
         duration: 3000,
       });
-    }
-    if (data.status === "success") {
-      toast(data.message, {
-        style: { backgroundColor: "green", color: "white" },
-        duration: 5000,
-      });
-      setFormData({
-        fullName: '',
-        email: '',
-        dateOfBirth: '',
-        phoneNumber: '',
-        alternateNumber: '',
-        address: '',
-        landmark: '',
-        country: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        district: '',
-        highestQualification: '',
-        schoolName: '',
-        boardName: '',
-        schoolMarks: '',
-        collegeName: '',
-        stream: '',
-        collegeBoardName: '',
-        collegeMarks: '',
-        universityCollegeName: '',
-        universityName: '',
-        courseName: '',
-        branchName: '',
-        startingYear: '',
-        graduationYear: '',
-        cgpa: '',
-        postGradCollegeName: '',
-        postGradCourseName: '',
-        postGradUniversityName: '',
-        postGradStartDate: '',
-        postGradEndDate: '',
-        activities: [{ activityName: '', activityRank: '' }],
-        internships: [{ companyName: '', position: '', startDate: '', endDate: '' }],
-        jobs: [{ companyName: '', position: '', startDate: '', endDate: '' }],
-      });
-  
-      // Optionally, remove form data from local storage
-      localStorage.removeItem('formData');
     }
   };
 
@@ -241,11 +289,12 @@ const CandidateForm = () => {
     }
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => {
+      const updatedFormData = { ...prev, [name]: value };
+      localStorage.setItem('formData', JSON.stringify(updatedFormData)); // Persist the data
+      return updatedFormData;
     });
   };
 
